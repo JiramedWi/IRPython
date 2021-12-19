@@ -1,6 +1,7 @@
 import pandas as pd
 import string
 import requests
+import stopwords as stopwords
 from bs4 import BeautifulSoup
 import numpy as np
 
@@ -69,3 +70,10 @@ def get_list_of_db():
     for i, db in enumerate(cleaned_db):
         print(' '.join(db) + ' + python: ' + str(with_python[i]) + ' of ' + str(raw[i]) + ' (' +
               str(np.around(with_python[i] / raw[i] * 100, 2)) + '%)')
+
+
+def inverse_indexing():
+    parse_description = parse_job_description()
+    sw_set = set(stopwords.words()) - {'c'}
+    sw_set = stopwords.words()
+    no_sw_description = parse_description.apply(lambda x: [w for w in x if w not in sw_set])
