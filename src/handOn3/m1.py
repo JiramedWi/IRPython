@@ -1,8 +1,8 @@
 import pandas as pd
 import string
 import requests
-import stopwords as stopwords
 from bs4 import BeautifulSoup
+import nltk.corpus as stopwords
 import numpy as np
 
 
