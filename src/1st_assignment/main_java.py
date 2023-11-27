@@ -59,7 +59,8 @@ def get_list_of_db():
     raw = [None] * len(cleaned_db)
     for i, db in enumerate(cleaned_db):
         raw[i] = parsed_description.apply(lambda s: np.all([x in s for x in db])).sum()
-        print(' '.join(db) + ': ' + str(raw[i]) + ' of ' + str(parsed_description.shape[0]) + ' ' + str(np.around(raw[i] / parsed_description.shape[0] * 100, 2)) + '%')
+        print(' '.join(db) + ': ' + str(raw[i]) + ' of ' + str(parsed_description.shape[0]) + ' ' + str(
+            np.around(raw[i] / parsed_description.shape[0] * 100, 2)) + '%')
 
         with_java = [None] * len(cleaned_db)
     for i, db in enumerate(cleaned_db):
@@ -72,6 +73,7 @@ def get_list_of_db():
         print(' '.join(db) + ' + java: ' + str(with_java[i]) + ' of ' + str(raw[i]) + ' (' +
               str(np.around(with_java[i] / raw[i] * 100, 2)) + '%)')
 
+
 def count_all_language():
     lang = [['java'], ['python'], ['c'], ['kotlin'], ['swift'], ['rust'], ['ruby'], ['scala'], ['julia'],
             ['lua']]
@@ -83,4 +85,3 @@ def count_all_language():
                              columns=[' '.join(d) for d in all_terms])
     query_map[query_map['java'] > 0].apply(lambda s: np.where(s == 1)[0],
                                            axis=1).apply(lambda s: list(query_map.columns[s]))
-

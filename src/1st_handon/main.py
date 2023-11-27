@@ -1,10 +1,10 @@
 import pandas as pd
 import string
 import requests
-import stopwords as stopwords
+import nltk
+from nltk.corpus import stopwords
 from bs4 import BeautifulSoup
 import numpy as np
-
 
 def get_and_clean_data():
     data = pd.read_csv('resource/software_developer_united_states_1971_20191023_1.csv')
