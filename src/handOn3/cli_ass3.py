@@ -13,6 +13,7 @@ import bm25
 
 app = typer.Typer()
 
+
 def preProcess(s):
     ps = PorterStemmer()
     s = word_tokenize(s)
@@ -22,6 +23,7 @@ def preProcess(s):
     s = [ps.stem(w) for w in s]
     s = ' '.join(s)
     return s
+
 
 @app.command()
 def vtr():
@@ -37,18 +39,19 @@ def vtr():
     X = vectorizer.fit_transform(cleaned_description)
     inputRange = int(inputRange)
     cleaned_description.iloc[:inputRange]
-    if(inputMethod == "tf"):
+    if (inputMethod == "tf"):
         print(X.toarray())
-    elif(inputMethod == "tfidf"):
+    elif (inputMethod == "tfidf"):
         X.data = np.log10(X.data + 1)
         X.data = X.multiply(np.log10(inputRange / X.sum(0))[0])
         print(X.toarray())
         print(pd.DataFrame(X.toarray(), columns=vectorizer.get_feature_names()))
-    elif(inputMethod == "bm25"):
+    elif (inputMethod == "bm25"):
         bm25.fit(cleaned_description)
         print(bm25.transform(inputQuery, cleaned_description))
     else:
         print("? where is the method run it again!!")
+
 
 @app.command()
 def bye():

@@ -40,11 +40,9 @@ class BM25(object):
         return (numer / denom).sum(1).A1
 
 
-
-#------------ End of library impl. Followings are the example -----------------
+# ------------ End of library impl. Followings are the example -----------------
 
 from sklearn.datasets import fetch_20newsgroups
-
 
 texts = fetch_20newsgroups(subset='train').data
 bm25 = BM25()
