@@ -5,11 +5,11 @@ import numpy as np
 import threading
 import time
 
-from newMaterial import parse_job_description
+from m1 import parse_job_description
 
-import newMaterial
+import m1
 
-cleaned_description = newMaterial.get_and_clean_data()
+cleaned_description = m1.get_and_clean_data()
 parsed_description = parse_job_description()
 
 
@@ -30,7 +30,6 @@ def whole_function():
     searched_lang = set.union(*[invert_idx[s] for s in stemmed_lang])
     appear_both = searched_db.intersection(searched_lang)
     print(parsed_description.loc[appear_both].apply(lambda x: ' '.join(x)).tail().to_markdown())
-
 
 # start = time.perf_counter()
 # t = threading.Thread(target=whole_function(), args=[1])

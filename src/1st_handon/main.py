@@ -9,7 +9,8 @@ from bs4 import BeautifulSoup
 import numpy as np
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
-
+from multiprocessing import Pool
+from multiprocessing import cpu_count
 
 def get_and_clean_data():
     data = pd.read_csv('resource/software_developer_united_states_1971_20191023_1.csv')
