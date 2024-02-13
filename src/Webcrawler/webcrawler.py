@@ -63,22 +63,18 @@ class MultiThreadCrawler:
             title = soup.find('title').string.strip()
             text = u" ".join(t.strip() for t in visible_texts).strip()
             data = pd.DataFrame({'url': [url], 'title': [title], 'text': [text], 'url_lists': [url_list]})
-            with open(self.stored_folder / (str(hash(url)) + '.txt'), 'w', encoding='utf-8') as f:
-                json.dump({'url': url, 'title': title, 'text': text, 'url_lists': url_list}, f, ensure_ascii=False)
+            data.to_csv(self.stored_folder / (str(hash(url)) + '.csv'), index=False, encoding='utf-8')
+            # with open(self.stored_folder / (str(hash(url)) + '.txt'), 'w', encoding='utf-8') as f:
+            #     json.dump({'url': url, 'title': title, 'text': text, 'url_lists': url_list}, f, ensure_ascii=False)
         except:
             pass
-        return data
 
     def extract_page(self, obj):
-        df = []
         if obj.result():
             result, url, depth = obj.result()
             if result and result.status_code == 200:
                 url_lists = self.parse_links(result.text, depth)
-                data = self.parse_contents(url, result.text, url_lists)
-                df.append(data)
-        df = pd.concat(df, ignore_index=True)
-        joblib.dump(df, self.stored_folder / 'crawled_data.pkl')
+                self.parse_contents(url, result.text, url_lists)
 
     def get_page(self, url, depth):
         try:
@@ -108,5 +104,5 @@ class MultiThreadCrawler:
 
 
 if __name__ == '__main__':
-    crawler = MultiThreadCrawler("https://camt.cmu.ac.th/index.php/en/", 2)
+    crawler = MultiThreadCrawler("https://camt.cmu.ac.th/index.php/en/", 5)
     crawler.run_scraper()
