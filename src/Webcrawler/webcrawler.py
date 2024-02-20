@@ -64,8 +64,8 @@ class MultiThreadCrawler:
             text = u" ".join(t.strip() for t in visible_texts).strip()
             data = pd.DataFrame({'url': [url], 'title': [title], 'text': [text], 'url_lists': [url_list]})
             data.to_csv(self.stored_folder / (str(hash(url)) + '.csv'), index=False, encoding='utf-8')
-            # with open(self.stored_folder / (str(hash(url)) + '.txt'), 'w', encoding='utf-8') as f:
-            #     json.dump({'url': url, 'title': title, 'text': text, 'url_lists': url_list}, f, ensure_ascii=False)
+            with open(self.stored_folder / (str(hash(url)) + '.txt'), 'w', encoding='utf-8') as f:
+                json.dump({'url': url, 'title': title, 'text': text, 'url_lists': url_list}, f, ensure_ascii=False)
         except:
             pass
 

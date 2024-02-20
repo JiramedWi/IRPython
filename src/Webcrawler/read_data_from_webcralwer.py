@@ -15,7 +15,7 @@ from elasticsearch import Elasticsearch
 
 # Read all csv file in crawled folder
 def read_crawled_data():
-    path = 'crawled'
+    path = '/crawled'
     all_files = Path(path).rglob('*.csv')
     li = []
     for filename in all_files:
@@ -37,10 +37,10 @@ def preProcess(s):
     return s
 
 
-data = pd.read_pickle('crawled/crawled_data_df.pkl')
-tfidf_vectorizer = TfidfVectorizer(preprocessor=preProcess, stop_words=stopwords.words('english'))
-bm25 = BM25(tfidf_vectorizer)
-bm25.fit(data.apply(lambda s: ' '.join(s[['title', 'text']]), axis=1))
+# # data = pd.read_pickle('crawled/crawled_data_df.pkl')
+# tfidf_vectorizer = TfidfVectorizer(preprocessor=preProcess, stop_words=stopwords.words('english'))
+# bm25 = BM25(tfidf_vectorizer)
+# bm25.fit(data.apply(lambda s: ' '.join(s[['title', 'text']]), axis=1))
 
 es = Elasticsearch("https://localhost:9200", basic_auth=("elastic", "wfElebF0u9Z*h+xdgv6+"),
                    ca_certs="/Users/Jumma/http_ca.crt")
