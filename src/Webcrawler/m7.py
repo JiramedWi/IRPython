@@ -59,26 +59,26 @@ def initialize_pool(stopwords_arg, stemmer_arg):
     stemmer = stemmer_arg
 
 
-# # Start time
-# start = time.time()
-# print("Start pool things")
-# dataset = pd.read_json('resource/embold_train.json')
-# dataset.loc[dataset['label'] > 0, 'label'] = -1
-# dataset.loc[dataset['label'] == 0, 'label'] = 1
-# dataset.loc[dataset['label'] == -1, 'label'] = 0
-# stopwords = set(stopwords.words('English'))
-# pool = Pool(8, initializer=initialize_pool, initargs=(stopwords, ps))
-# cleaned_title = pool.map(preprocess, dataset.title)
-# cleaned_body = pool.map(preprocess, dataset.body)
-# # End time in minutes
-# end = time.time()
-# print("Time taken in minutes: ", (end - start) / 60)
-# pool.close()
+# Start time
+start = time.time()
+print("Start pool things")
+dataset = pd.read_json('resource/embold_train.json')
+dataset.loc[dataset['label'] > 0, 'label'] = -1
+dataset.loc[dataset['label'] == 0, 'label'] = 1
+dataset.loc[dataset['label'] == -1, 'label'] = 0
+stopwords = set(stopwords.words('English'))
+pool = Pool(8, initializer=initialize_pool, initargs=(stopwords, ps))
+cleaned_title = pool.map(preprocess, dataset.title)
+cleaned_body = pool.map(preprocess, dataset.body)
+# End time in minutes
+end = time.time()
+print("Time taken in minutes: ", (end - start) / 60)
+pool.close()
 
-# data_texts = pd.DataFrame([cleaned_title, cleaned_body], index=['title', 'body']).T
-# joblib.dump(data_texts, 'resource/data_texts.pkl')
-# y = dataset['label']
-# joblib.dump(y, 'resource/y.pkl')
+data_texts = pd.DataFrame([cleaned_title, cleaned_body], index=['title', 'body']).T
+joblib.dump(data_texts, 'resource/data_texts.pkl')
+y = dataset['label']
+joblib.dump(y, 'resource/y.pkl')
 
 data_texts = joblib.load('resource/data_texts.pkl')
 y = joblib.load('resource/y.pkl')
