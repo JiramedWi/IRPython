@@ -42,7 +42,7 @@ def preProcess(s):
 # bm25 = BM25(tfidf_vectorizer)
 # bm25.fit(data.apply(lambda s: ' '.join(s[['title', 'text']]), axis=1))
 
-es = Elasticsearch("https://localhost:9200", basic_auth=("elastic", "wfElebF0u9Z*h+xdgv6+"),
+es = Elasticsearch("https://localhost:9200", basic_auth=("elastic", "2mUm9sEz9uZL4-S-KCX0"),
                    ca_certs="/Users/Jumma/http_ca.crt")
 
 es.info().body

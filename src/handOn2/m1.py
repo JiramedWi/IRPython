@@ -104,19 +104,19 @@ def search(invert_idx, query):
     return matched
 
 
-# start_time = time.time()
-# start_time_gmt = time.gmtime(start_time)
-# print(time.strftime("%Y-%m-%d %H:%M:%S", start_time_gmt))
+start_time = time.time()
+start_time_gmt = time.gmtime(start_time)
+print(time.strftime("%Y-%m-%d %H:%M:%S", start_time_gmt))
+
+parsed_description_new = parse_job_description()
+invert_idx = inverse_indexing(parsed_description_new)
+query = 'java oracle'
+matched = search(invert_idx, query)
+
+end_time = time.time()
+result_time = end_time - start_time
+result_time_gmt = time.gmtime(result_time)
+result_time = time.strftime("%H:%M:%S", result_time_gmt)
+print(f"Total time: {result_time}")
 #
-# parsed_description_new = parse_job_description()
-# invert_idx = inverse_indexing(parsed_description_new)
-# query = 'java oracle'
-# matched = search(invert_idx, query)
-#
-# end_time = time.time()
-# result_time = end_time - start_time
-# result_time_gmt = time.gmtime(result_time)
-# result_time = time.strftime("%H:%M:%S", result_time_gmt)
-# print(f"Total time: {result_time}")
-#
-# print(parsed_description_new.loc[matched].apply(lambda x: ' '.join(x)).head().to_markdown())
+print(parsed_description_new.loc[matched].apply(lambda x: ' '.join(x)).head().to_markdown())

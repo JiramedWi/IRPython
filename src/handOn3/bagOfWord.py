@@ -1,5 +1,6 @@
 import re
 
+import joblib
 import pandas as pd
 
 import numpy as np
@@ -31,31 +32,38 @@ def preProcess(s):
 #     query = vectorizer.transform(['good at java and python'])
 #     print(query)
 #     print(vectorizer.inverse_transform(query))
-    # vectorizer = CountVectorizer(preprocessor=preProcess, ngram_range=(1, 2))
-    # X = vectorizer.fit_transform(cleaned_description)
-    # print(vectorizer.get_feature_names())
-    #
-    # N = 5
-    # cleaned_description = m1.get_and_clean_data()
-    # cleaned_description = cleaned_description.iloc[:N]
-    # vectorizer = CountVectorizer(preprocessor=preProcess)
-    # X = vectorizer.fit_transform(cleaned_description)
-    # print(X.toarray())
-    #
-    # # idf = N / (X.tocoo()>0).sum(0)
-    # X.data = np.log10(X.data + 1)
-    # X.data = X.multiply(np.log10(N / X.sum(0))[0])
-    # print(X.toarray())
-    # print(pd.DataFrame(X.toarray(), columns=vectorizer.get_feature_names()))
+# vectorizer = CountVectorizer(preprocessor=preProcess, ngram_range=(1, 2))
+# X = vectorizer.fit_transform(cleaned_description)
+# print(vectorizer.get_feature_names())
+#
+# N = 5
+# cleaned_description = m1.get_and_clean_data()
+# cleaned_description = cleaned_description.iloc[:N]
+# vectorizer = CountVectorizer(preprocessor=preProcess)
+# X = vectorizer.fit_transform(cleaned_description)
+# print(X.toarray())
+#
+# # idf = N / (X.tocoo()>0).sum(0)
+# X.data = np.log10(X.data + 1)
+# X.data = X.multiply(np.log10(N / X.sum(0))[0])
+# print(X.toarray())
+# print(pd.DataFrame(X.toarray(), columns=vectorizer.get_feature_names()))
 
 
-def sk_vectorize(texts, cleaned_description, stop_dict, stem_cache):
-    my_custom_preprocessor = create_custom_preprocessor(stop_dict, stem_cache)
-    vectorizer = CountVectorizer(preprocessor=my_custom_preprocessor)
-    vectorizer.fit(cleaned_description)
+def sk_vectorize(texts, vectorizer):
+    # my_custom_preprocessor = create_custom_preprocessor(stop_dict, stem_cache)
+    # vectorizer = CountVectorizer(preprocessor=my_custom_preprocessor)
+    # vectorizer.fit(cleaned_description)
     query = vectorizer.transform(texts)
     print(query)
     print(vectorizer.inverse_transform(query))
+
+
+def vectorize_preprocess(cleaned_description, stop_dict, stem_cache, ngram_range):
+    my_custom_preprocessor = create_custom_preprocessor(stop_dict, stem_cache)
+    vectorizer = CountVectorizer(preprocessor=my_custom_preprocessor, ngram_range=ngram_range)
+    vectorizer.fit(cleaned_description)
+    return vectorizer
 
 
 def create_stem_cache(cleaned_description):
@@ -87,7 +95,13 @@ cleaned_description = m1.get_and_clean_data()
 stem_cache = create_stem_cache(cleaned_description)
 stop_dict = set(stopwords.words('English'))
 my_custom_preprocessor = create_custom_preprocessor(stop_dict, stem_cache)
-sk_vectorize(['python is simpler than java'], cleaned_description, stop_dict, stem_cache)
+vectorizer = vectorize_preprocess(cleaned_description, stop_dict, stem_cache, (1, 2))
+joblib.dump(vectorizer, './resource/vectorizer_n_2.pkl')
+print('vectorizer saved')
+vectorizer = joblib.load('./resource/vectorizer.pkl')
+vectorizer_n_2 = joblib.load('./resource/vectorizer_n_2.pkl')
+sk_vectorize(['python is simpler than java'], vectorizer)
+
 
 tf_idf_vectorizer = TfidfVectorizer(preprocessor=my_custom_preprocessor, use_idf=True)
 tf_idf_vectorizer.fit(cleaned_description)
@@ -99,7 +113,8 @@ print(X_tfidf_df[max_term].head(5).to_markdown())
 query = ['product manager who can also provide supports in documentation']
 query = ['aws devops']
 transformed_query = tf_idf_vectorizer.transform(query)
-transformed_query_df = pd.DataFrame(transformed_query.toarray(), columns=tf_idf_vectorizer.get_feature_names_out()).loc[0]
+transformed_query_df = pd.DataFrame(transformed_query.toarray(),
+                                    columns=tf_idf_vectorizer.get_feature_names_out()).loc[0]
 print('new query')
 print(transformed_query_df[max_term].to_markdown())
 q_dot_d = X_tfidf_df.dot(transformed_query_df.T)

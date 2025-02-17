@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 src/Webcrawler/crawled
+src/Webcrawler/crawled_new
 
 # C extensions
 *.so
